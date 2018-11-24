@@ -1,0 +1,168 @@
+Script started on 2018-11-24 15:43:20+0100
+mirko@tiger:~/Documents/MoCC exercise1$ aws ec2 create-security-group --group-name devenv-sg --description "security group for development environment"
+-------------------------------------
+|        CreateSecurityGroup        |
++----------+------------------------+
+|  GroupId |  sg-0eba59e29f2a2c2c8  |
++----------+------------------------+
+mirko@tiger:~/Documents/MoCC exercise1$ aws ec2 authorize-security-group-ingress --group-name devenv-sg --protocol tcp --port 22 --cidr 0.0.0.0/0
+mirko@tiger:~/Documents/MoCC exercise1$ # created security-group and granted external access on SSH-port for the whole ipv4 space
+mirko@tiger:~/Documents/MoCC exercise1$ aws ec2 create-key-pair --key-name devenv-key --query 'KeyMaterial' --output text > devenv-key.pem
+mirko@tiger:~/Documents/MoCC exercise1$ # created SSH key pair
+mirko@tiger:~/Documents/MoCC exercise1$ chmod 400 devenv-key.pem
+mirko@tiger:~/Documents/MoCC exercise1$ aws ec2 run-instances --image-id ami-0f0debf49705e047c --security-group-ids sg-0eba59e29f2a2c2c8 --count 1 --instance-type t2.nano --key-name devenv-key --query 'Instances[0].InstanceId'
+--------------
+|RunInstances|
++------------+
+mirko@tiger:~/Documents/MoCC exercise1$ aws ec2 describe-instances
+---------------------------------------------------------------------------------------
+|                                  DescribeInstances                                  |
++-------------------------------------------------------------------------------------+
+||                                   Reservations                                    ||
+|+----------------------------------+------------------------------------------------+|
+||  OwnerId                         |  145953835258                                  ||
+||  ReservationId                   |  r-06e613f9810544cd1                           ||
+|+----------------------------------+------------------------------------------------+|
+|||                                    Instances                                    |||
+||+------------------------+--------------------------------------------------------+||
+|||  AmiLaunchIndex        |  0                                                     |||
+|||  Architecture          |  x86_64                                                |||
+|||  ClientToken           |                                                        |||
+|||  EbsOptimized          |  False                                                 |||
+|||  EnaSupport            |  True                                                  |||
+|||  Hypervisor            |  xen                                                   |||
+|||  ImageId               |  ami-0f0debf49705e047c                                 |||
+|||  InstanceId            |  i-003b028bce5805df6                                   |||
+|||  InstanceType          |  t2.nano                                               |||
+|||  KeyName               |  devenv-key                                            |||
+|||  LaunchTime            |  2018-11-24T15:28:26.000Z                              |||
+|||  PrivateDnsName        |  ip-172-31-35-170.eu-central-1.compute.internal        |||
+|||  PrivateIpAddress      |  172.31.35.170                                         |||
+|||  PublicDnsName         |  ec2-18-195-23-196.eu-central-1.compute.amazonaws.com  |||
+|||  PublicIpAddress       |  18.195.23.196                                         |||
+|||  RootDeviceName        |  /dev/xvda                                             |||
+|||  RootDeviceType        |  ebs                                                   |||
+|||  SourceDestCheck       |  True                                                  |||
+|||  StateTransitionReason |                                                        |||
+|||  SubnetId              |  subnet-36a4f24b                                       |||
+|||  VirtualizationType    |  hvm                                                   |||
+|||  VpcId                 |  vpc-4e88b825                                          |||
+||+------------------------+--------------------------------------------------------+||
+||||                              BlockDeviceMappings                              ||||
+|||+----------------------------------------+--------------------------------------+|||
+||||  DeviceName                            |  /dev/xvda                           ||||
+|||+----------------------------------------+--------------------------------------+|||
+|||||                                     Ebs                                     |||||
+||||+----------------------------------+------------------------------------------+||||
+|||||  AttachTime                      |  2018-11-24T15:28:26.000Z                |||||
+|||||  DeleteOnTermination             |  True                                    |||||
+|||||  Status                          |  attached                                |||||
+|||||  VolumeId                        |  vol-0244549145d725c79                   |||||
+||||+----------------------------------+------------------------------------------+||||
+||||                                  Monitoring                                   ||||
+|||+---------------------------------+---------------------------------------------+|||
+||||  State                          |  disabled                                   ||||
+|||+---------------------------------+---------------------------------------------+|||
+||||                               NetworkInterfaces                               ||||
+|||+-----------------------+-------------------------------------------------------+|||
+||||  Description          |                                                       ||||
+||||  MacAddress           |  06:6e:82:45:ed:ce                                    ||||
+||||  NetworkInterfaceId   |  eni-09962a7c9f4ec948b                                ||||
+||||  OwnerId              |  145953835258                                         ||||
+||||  PrivateDnsName       |  ip-172-31-35-170.eu-central-1.compute.internal       ||||
+||||  PrivateIpAddress     |  172.31.35.170                                        ||||
+||||  SourceDestCheck      |  True                                                 ||||
+||||  Status               |  in-use                                               ||||
+||||  SubnetId             |  subnet-36a4f24b                                      ||||
+||||  VpcId                |  vpc-4e88b825                                         ||||
+|||+-----------------------+-------------------------------------------------------+|||
+|||||                                 Association                                 |||||
+||||+----------------+------------------------------------------------------------+||||
+|||||  IpOwnerId     |  amazon                                                    |||||
+|||||  PublicDnsName |  ec2-18-195-23-196.eu-central-1.compute.amazonaws.com      |||||
+|||||  PublicIp      |  18.195.23.196                                             |||||
+||||+----------------+------------------------------------------------------------+||||
+|||||                                 Attachment                                  |||||
+||||+-------------------------------+---------------------------------------------+||||
+|||||  AttachTime                   |  2018-11-24T15:28:26.000Z                   |||||
+|||||  AttachmentId                 |  eni-attach-05abef6b470bf38ca               |||||
+|||||  DeleteOnTermination          |  True                                       |||||
+|||||  DeviceIndex                  |  0                                          |||||
+|||||  Status                       |  attached                                   |||||
+||||+-------------------------------+---------------------------------------------+||||
+|||||                                   Groups                                    |||||
+||||+--------------------------+--------------------------------------------------+||||
+|||||  GroupId                 |  sg-0eba59e29f2a2c2c8                            |||||
+|||||  GroupName               |  devenv-sg                                       |||||
+||||+--------------------------+--------------------------------------------------+||||
+|||||                             PrivateIpAddresses                              |||||
+||||+---------------------+-------------------------------------------------------+||||
+|||||  Primary            |  True                                                 |||||
+|||||  PrivateDnsName     |  ip-172-31-35-170.eu-central-1.compute.internal       |||||
+|||||  PrivateIpAddress   |  172.31.35.170                                        |||||
+||||+---------------------+-------------------------------------------------------+||||
+||||||                                Association                                ||||||
+|||||+----------------+----------------------------------------------------------+|||||
+||||||  IpOwnerId     |  amazon                                                  ||||||
+||||||  PublicDnsName |  ec2-18-195-23-196.eu-central-1.compute.amazonaws.com    ||||||
+||||||  PublicIp      |  18.195.23.196                                           ||||||
+|||||+----------------+----------------------------------------------------------+|||||
+||||                                   Placement                                   ||||
+|||+------------------------------------------+------------------------------------+|||
+||||  AvailabilityZone                        |  eu-central-1b                     ||||
+||||  GroupName                               |                                    ||||
+||||  Tenancy                                 |  default                           ||||
+|||+------------------------------------------+------------------------------------+|||
+||||                                SecurityGroups                                 ||||
+|||+--------------------------+----------------------------------------------------+|||
+||||  GroupId                 |  sg-0eba59e29f2a2c2c8                              ||||
+||||  GroupName               |  devenv-sg                                         ||||
+|||+--------------------------+----------------------------------------------------+|||
+||||                                     State                                     ||||
+|||+--------------------------------+----------------------------------------------+|||
+||||  Code                          |  16                                          ||||
+||||  Name                          |  running                                     ||||
+|||+--------------------------------+----------------------------------------------+|||
+mirko@tiger:~/Documents/MoCC exercise1$ # the AMI ID is taken from the AWS Marketplace: Amazon Linux AMI (HVM / 64-bit)
+mirko@tiger:~/Documents/MoCC exercise1$ aws ec2 describe-instances --instance-ids i-003b028bce5805df6 --query 'Reservations[0].Instances[0].PublicIpAddress' --output json
+"18.195.23.196"
+mirko@tiger:~/Documents/MoCC exercise1$ ssh -i devenv-key.pem ec2-user@18.195.23.196
+The authenticity of host '18.195.23.196 (18.195.23.196)' can't be established.
+ECDSA key fingerprint is SHA256:8vzynBsHdXtr+gDElLk1zcEko0GmXWLB+XIjHITkWoQ.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '18.195.23.196' (ECDSA) to the list of known hosts.
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-ami/2018.03-release-notes/
+[ec2-user@ip-172-31-35-170 ~]$ groups
+ec2-user wheel
+[ec2-user@ip-172-31-35-170 ~]$ logout
+Connection to 18.195.23.196 closed.
+mirko@tiger:~/Documents/MoCC exercise1$ aws ec2 terminate-instances --instance-ids i-003b028bce5805df6
+-------------------------------
+|     TerminateInstances      |
++-----------------------------+
+||   TerminatingInstances    ||
+|+---------------------------+|
+||        InstanceId         ||
+|+---------------------------+|
+||  i-003b028bce5805df6      ||
+|+---------------------------+|
+|||      CurrentState       |||
+||+-------+-----------------+||
+||| Code  |      Name       |||
+||+-------+-----------------+||
+|||  32   |  shutting-down  |||
+||+-------+-----------------+||
+|||      PreviousState      |||
+||+---------+---------------+||
+|||  Code   |     Name      |||
+||+---------+---------------+||
+|||  16     |  running      |||
+||+---------+---------------+||
+mirko@tiger:~/Documents/MoCC exercise1$ exit
+
+Script done on 2018-11-24 16:47:19+0100

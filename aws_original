@@ -1,0 +1,335 @@
+Script started on 2018-11-24 15:43:20+0100
+]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ aws ec2 create-security-group --group-name[K]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ aws ec2 create-security-group --group-name devenv-sg --description "security group for development environment"
+-------------------------------------
+[0m[0m|        CreateSecurityGroup        |[0m[0m
+[0m[0m+----------+------------------------+[0m[0m
+[0m[0m|  [1m[34mGroupId[0m |  [1m[34msg-0eba59e29f2a2c2c8[0m  |[0m[0m
+[0m[0m+----------+------------------------+[0m[0m
+[0m[0m]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ aws ec2 authorize-security-group-ingress --group-name devenv-sg --protocol tcp --port 22 --cidr 0.0.0.0/0
+[0m]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ # created security-grp[Koup and grantex[Kd external access on SSH-port for the h[Kwhole ip spacev space4 space
+]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ aws ec2 create-key-pair --key-name devenv-key --query 'KeyMaterial' --output text > devenv-key.pem
+]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ # created SSH keyp[K pair
+]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ chmod 400 devenv-key.pem
+]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ [K]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ [K]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ aws ec2 run-instances --image-id ami-0f0debf49705e0447c --security-group-ids sg-0eba59e29f2a2c2c8 --count 1 --instance-type t2.mic[K[K[Knano --key-name  devenv-key --quere[Ky 'Instances[0].InstanceId'
+--------------
+[0m[0m|RunInstances|[0m[0m
+[0m[0m+------------+[0m[0m
+[0m[0m]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ aws ec2 describe-instances --instance-ids[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kaws ec2 describe [K-instances
+---------------------------------------------------------------------------------------
+[0m[0m|                                  DescribeInstances                                  |[0m[0m
+[0m[0m+-------------------------------------------------------------------------------------+[0m[0m
+[0m[2m[33m|[0m[0m|                                   Reservations                                    |[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[0m+----------------------------------+------------------------------------------------+[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[0m|  [1m[34mOwnerId[0m                         |  [1m[34m145953835258[0m                                  |[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[0m|  [1m[34mReservationId[0m                   |  [1m[34mr-06e613f9810544cd1[0m                           |[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[0m+----------------------------------+------------------------------------------------+[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|                                    Instances                                    |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m+------------------------+--------------------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mAmiLaunchIndex[0m        |  [1m[34m0[0m                                                     |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mArchitecture[0m          |  [1m[34mx86_64[0m                                                |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mClientToken[0m           |  [1m[34m[0m                                                      |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mEbsOptimized[0m          |  [1m[34mFalse[0m                                                 |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mEnaSupport[0m            |  [1m[34mTrue[0m                                                  |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mHypervisor[0m            |  [1m[34mxen[0m                                                   |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mImageId[0m               |  [1m[34mami-0f0debf49705e047c[0m                                 |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mInstanceId[0m            |  [1m[34mi-003b028bce5805df6[0m                                   |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mInstanceType[0m          |  [1m[34mt2.nano[0m                                               |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mKeyName[0m               |  [1m[34mdevenv-key[0m                                            |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mLaunchTime[0m            |  [1m[34m2018-11-24T15:28:26.000Z[0m                              |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mPrivateDnsName[0m        |  [1m[34mip-172-31-35-170.eu-central-1.compute.internal[0m        |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mPrivateIpAddress[0m      |  [1m[34m172.31.35.170[0m                                         |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mPublicDnsName[0m         |  [1m[34mec2-18-195-23-196.eu-central-1.compute.amazonaws.com[0m  |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mPublicIpAddress[0m       |  [1m[34m18.195.23.196[0m                                         |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mRootDeviceName[0m        |  [1m[34m/dev/xvda[0m                                             |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mRootDeviceType[0m        |  [1m[34mebs[0m                                                   |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mSourceDestCheck[0m       |  [1m[34mTrue[0m                                                  |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mStateTransitionReason[0m |  [1m[34m[0m                                                      |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mSubnetId[0m              |  [1m[34msubnet-36a4f24b[0m                                       |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mVirtualizationType[0m    |  [1m[34mhvm[0m                                                   |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mVpcId[0m                 |  [1m[34mvpc-4e88b825[0m                                          |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m+------------------------+--------------------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|                              BlockDeviceMappings                              |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+----------------------------------------+--------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mDeviceName[0m                            |  [1m[34m/dev/xvda[0m                           |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+----------------------------------------+--------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|                                     Ebs                                     |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+----------------------------------+------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mAttachTime[0m                      |  [1m[34m2018-11-24T15:28:26.000Z[0m                |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mDeleteOnTermination[0m             |  [1m[34mTrue[0m                                    |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mStatus[0m                          |  [1m[34mattached[0m                                |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mVolumeId[0m                        |  [1m[34mvol-0244549145d725c79[0m                   |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+----------------------------------+------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|                                  Monitoring                                   |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+---------------------------------+---------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mState[0m                          |  [1m[34mdisabled[0m                                   |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+---------------------------------+---------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|                               NetworkInterfaces                               |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+-----------------------+-------------------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mDescription[0m          |  [1m[34m[0m                                                     |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mMacAddress[0m           |  [1m[34m06:6e:82:45:ed:ce[0m                                    |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mNetworkInterfaceId[0m   |  [1m[34meni-09962a7c9f4ec948b[0m                                |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mOwnerId[0m              |  [1m[34m145953835258[0m                                         |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mPrivateDnsName[0m       |  [1m[34mip-172-31-35-170.eu-central-1.compute.internal[0m       |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mPrivateIpAddress[0m     |  [1m[34m172.31.35.170[0m                                        |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mSourceDestCheck[0m      |  [1m[34mTrue[0m                                                 |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mStatus[0m               |  [1m[34min-use[0m                                               |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mSubnetId[0m             |  [1m[34msubnet-36a4f24b[0m                                      |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mVpcId[0m                |  [1m[34mvpc-4e88b825[0m                                         |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+-----------------------+-------------------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|                                 Association                                 |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+----------------+------------------------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mIpOwnerId[0m     |  [1m[34mamazon[0m                                                    |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mPublicDnsName[0m |  [1m[34mec2-18-195-23-196.eu-central-1.compute.amazonaws.com[0m      |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mPublicIp[0m      |  [1m[34m18.195.23.196[0m                                             |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+----------------+------------------------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|                                 Attachment                                  |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+-------------------------------+---------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mAttachTime[0m                   |  [1m[34m2018-11-24T15:28:26.000Z[0m                   |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mAttachmentId[0m                 |  [1m[34meni-attach-05abef6b470bf38ca[0m               |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mDeleteOnTermination[0m          |  [1m[34mTrue[0m                                       |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mDeviceIndex[0m                  |  [1m[34m0[0m                                          |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mStatus[0m                       |  [1m[34mattached[0m                                   |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+-------------------------------+---------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|                                   Groups                                    |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+--------------------------+--------------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mGroupId[0m                 |  [1m[34msg-0eba59e29f2a2c2c8[0m                            |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mGroupName[0m               |  [1m[34mdevenv-sg[0m                                       |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+--------------------------+--------------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|                             PrivateIpAddresses                              |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+---------------------+-------------------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mPrimary[0m            |  [1m[34mTrue[0m                                                 |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mPrivateDnsName[0m     |  [1m[34mip-172-31-35-170.eu-central-1.compute.internal[0m       |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mPrivateIpAddress[0m   |  [1m[34m172.31.35.170[0m                                        |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+---------------------+-------------------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|                                Association                                |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+----------------+----------------------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mIpOwnerId[0m     |  [1m[34mamazon[0m                                                  |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mPublicDnsName[0m |  [1m[34mec2-18-195-23-196.eu-central-1.compute.amazonaws.com[0m    |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mPublicIp[0m      |  [1m[34m18.195.23.196[0m                                           |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+----------------+----------------------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|                                   Placement                                   |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+------------------------------------------+------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mAvailabilityZone[0m                        |  [1m[34meu-central-1b[0m                     |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mGroupName[0m                               |  [1m[34m[0m                                  |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mTenancy[0m                                 |  [1m[34mdefault[0m                           |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+------------------------------------------+------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|                                SecurityGroups                                 |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+--------------------------+----------------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mGroupId[0m                 |  [1m[34msg-0eba59e29f2a2c2c8[0m                              |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mGroupName[0m               |  [1m[34mdevenv-sg[0m                                         |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+--------------------------+----------------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|                                     State                                     |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+--------------------------------+----------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mCode[0m                          |  [1m[34m16[0m                                          |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34mName[0m                          |  [1m[34mrunning[0m                                     |[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m+--------------------------------+----------------------------------------------+[0m[2m[33m|[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[0m]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ # the AMI ID is taken from the AWS Marketplace: Amazzon Linux AMI (HVM / 64-bit)
+]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ aws ec2 describe-instances --instance-ids i-003b028bbce5805df6 --query 'Reservations[0].Instances[0].PublicIpAddress'
+-------------------
+[0m[0m|DescribeInstances|[0m[0m
+[0m[0m+-----------------+[0m[0m
+[0m[0m]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ aws ec2 describe-instances --instance-ids i-003b028bbce5805df6 --query 'Reservations[0].Instances[0].PublicIpAddress' --output json
+"18.195.23.196"
+]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ ssh -i devenv-key.pem ec2-user@18.195.23.196
+The authenticity of host '18.195.23.196 (18.195.23.196)' can't be established.
+ECDSA key fingerprint is SHA256:8vzynBsHdXtr+gDElLk1zcEko0GmXWLB+XIjHITkWoQ.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '18.195.23.196' (ECDSA) to the list of known hosts.
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-ami/2018.03-release-notes/
+]0;ec2-user@ip-172-31-35-170:~[?1034h[ec2-user@ip-172-31-35-170 ~]$ groups
+ec2-user wheel
+]0;ec2-user@ip-172-31-35-170:~[ec2-user@ip-172-31-35-170 ~]$ cat /etc/re
+request-key.conf  request-key.d/    resolv.conf       
+[ec2-user@ip-172-31-35-170 ~]$ cat /etc/re
+request-key.conf  request-key.d/    resolv.conf       
+[ec2-user@ip-172-31-35-170 ~]$ cat /etc/re[K[Kls[K[K
+Display all 184 possibilities? (y or n)
+[ec2-user@ip-172-31-35-170 ~]$ cat /etc/[K[K[K[K[K[K[K[K[Klogout
+Connection to 18.195.23.196 closed.
+]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ aws ec2 terminate-instance i-003b028bce5805df6
+usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
+To see help text, you can run:
+
+  aws help
+  aws <command> help
+  aws <command> <subcommand> help
+aws: error: argument operation: Invalid choice, valid choices are:
+
+accept-reserved-instances-exchange-quote | accept-vpc-endpoint-connections         
+accept-vpc-peering-connection            | allocate-address                        
+allocate-hosts                           | assign-ipv6-addresses                   
+assign-private-ip-addresses              | associate-address                       
+associate-dhcp-options                   | associate-iam-instance-profile          
+associate-route-table                    | associate-subnet-cidr-block             
+associate-vpc-cidr-block                 | attach-classic-link-vpc                 
+attach-internet-gateway                  | attach-network-interface                
+attach-volume                            | attach-vpn-gateway                      
+authorize-security-group-egress          | authorize-security-group-ingress        
+bundle-instance                          | cancel-bundle-task                      
+cancel-conversion-task                   | cancel-export-task                      
+cancel-import-task                       | cancel-reserved-instances-listing       
+cancel-spot-fleet-requests               | cancel-spot-instance-requests           
+confirm-product-instance                 | copy-fpga-image                         
+copy-image                               | copy-snapshot                           
+create-customer-gateway                  | create-default-subnet                   
+create-default-vpc                       | create-dhcp-options                     
+create-egress-only-internet-gateway      | create-flow-logs                        
+create-fpga-image                        | create-image                            
+create-instance-export-task              | create-internet-gateway                 
+create-key-pair                          | create-launch-template                  
+create-launch-template-version           | create-nat-gateway                      
+create-network-acl                       | create-network-acl-entry                
+create-network-interface                 | create-network-interface-permission     
+create-placement-group                   | create-reserved-instances-listing       
+create-route                             | create-route-table                      
+create-security-group                    | create-snapshot                         
+create-spot-datafeed-subscription        | create-subnet                           
+create-tags                              | create-volume                           
+create-vpc                               | create-vpc-endpoint                     
+create-vpc-endpoint-connection-notification | create-vpc-endpoint-service-configuration
+create-vpc-peering-connection            | create-vpn-connection                   
+create-vpn-connection-route              | create-vpn-gateway                      
+delete-customer-gateway                  | delete-dhcp-options                     
+delete-egress-only-internet-gateway      | delete-flow-logs                        
+delete-fpga-image                        | delete-internet-gateway                 
+delete-key-pair                          | delete-launch-template                  
+delete-launch-template-versions          | delete-nat-gateway                      
+delete-network-acl                       | delete-network-acl-entry                
+delete-network-interface                 | delete-network-interface-permission     
+delete-placement-group                   | delete-route                            
+delete-route-table                       | delete-security-group                   
+delete-snapshot                          | delete-spot-datafeed-subscription       
+delete-subnet                            | delete-tags                             
+delete-volume                            | delete-vpc                              
+delete-vpc-endpoint-connection-notifications | delete-vpc-endpoint-service-configurations
+delete-vpc-endpoints                     | delete-vpc-peering-connection           
+delete-vpn-connection                    | delete-vpn-connection-route             
+delete-vpn-gateway                       | deregister-image                        
+describe-account-attributes              | describe-addresses                      
+describe-aggregate-id-format             | describe-availability-zones             
+describe-bundle-tasks                    | describe-classic-link-instances         
+describe-conversion-tasks                | describe-customer-gateways              
+describe-dhcp-options                    | describe-egress-only-internet-gateways  
+describe-elastic-gpus                    | describe-export-tasks                   
+describe-flow-logs                       | describe-fpga-image-attribute           
+describe-fpga-images                     | describe-host-reservation-offerings     
+describe-host-reservations               | describe-hosts                          
+describe-iam-instance-profile-associations | describe-id-format                      
+describe-identity-id-format              | describe-image-attribute                
+describe-images                          | describe-import-image-tasks             
+describe-import-snapshot-tasks           | describe-instance-attribute             
+describe-instance-credit-specifications  | describe-instance-status                
+describe-instances                       | describe-internet-gateways              
+describe-key-pairs                       | describe-launch-template-versions       
+describe-launch-templates                | describe-moving-addresses               
+describe-nat-gateways                    | describe-network-acls                   
+describe-network-interface-attribute     | describe-network-interface-permissions  
+describe-network-interfaces              | describe-placement-groups               
+describe-prefix-lists                    | describe-principal-id-format            
+describe-regions                         | describe-reserved-instances             
+describe-reserved-instances-listings     | describe-reserved-instances-modifications
+describe-reserved-instances-offerings    | describe-route-tables                   
+describe-scheduled-instance-availability | describe-scheduled-instances            
+describe-security-group-references       | describe-security-groups                
+describe-snapshot-attribute              | describe-snapshots                      
+describe-spot-datafeed-subscription      | describe-spot-fleet-instances           
+describe-spot-fleet-request-history      | describe-spot-fleet-requests            
+describe-spot-instance-requests          | describe-spot-price-history             
+describe-stale-security-groups           | describe-subnets                        
+describe-tags                            | describe-volume-attribute               
+describe-volume-status                   | describe-volumes                        
+describe-volumes-modifications           | describe-vpc-attribute                  
+describe-vpc-classic-link                | describe-vpc-classic-link-dns-support   
+describe-vpc-endpoint-connection-notifications | describe-vpc-endpoint-connections       
+describe-vpc-endpoint-service-configurations | describe-vpc-endpoint-service-permissions
+describe-vpc-endpoint-services           | describe-vpc-endpoints                  
+describe-vpc-peering-connections         | describe-vpcs                           
+describe-vpn-connections                 | describe-vpn-gateways                   
+detach-classic-link-vpc                  | detach-internet-gateway                 
+detach-network-interface                 | detach-volume                           
+detach-vpn-gateway                       | disable-vgw-route-propagation           
+disable-vpc-classic-link                 | disable-vpc-classic-link-dns-support    
+disassociate-address                     | disassociate-iam-instance-profile       
+disassociate-route-table                 | disassociate-subnet-cidr-block          
+disassociate-vpc-cidr-block              | enable-vgw-route-propagation            
+enable-volume-io                         | enable-vpc-classic-link                 
+enable-vpc-classic-link-dns-support      | get-console-output                      
+get-console-screenshot                   | get-host-reservation-purchase-preview   
+get-launch-template-data                 | get-password-data                       
+get-reserved-instances-exchange-quote    | import-image                            
+import-key-pair                          | import-snapshot                         
+modify-fpga-image-attribute              | modify-hosts                            
+modify-id-format                         | modify-identity-id-format               
+modify-image-attribute                   | modify-instance-attribute               
+modify-instance-credit-specification     | modify-instance-placement               
+modify-launch-template                   | modify-network-interface-attribute      
+modify-reserved-instances                | modify-snapshot-attribute               
+modify-spot-fleet-request                | modify-subnet-attribute                 
+modify-volume                            | modify-volume-attribute                 
+modify-vpc-attribute                     | modify-vpc-endpoint                     
+modify-vpc-endpoint-connection-notification | modify-vpc-endpoint-service-configuration
+modify-vpc-endpoint-service-permissions  | modify-vpc-peering-connection-options   
+modify-vpc-tenancy                       | monitor-instances                       
+move-address-to-vpc                      | purchase-host-reservation               
+purchase-reserved-instances-offering     | purchase-scheduled-instances            
+reboot-instances                         | register-image                          
+reject-vpc-endpoint-connections          | reject-vpc-peering-connection           
+release-address                          | release-hosts                           
+replace-iam-instance-profile-association | replace-network-acl-association         
+replace-network-acl-entry                | replace-route                           
+replace-route-table-association          | report-instance-status                  
+request-spot-fleet                       | request-spot-instances                  
+reset-fpga-image-attribute               | reset-image-attribute                   
+reset-instance-attribute                 | reset-network-interface-attribute       
+reset-snapshot-attribute                 | restore-address-to-classic              
+revoke-security-group-egress             | revoke-security-group-ingress           
+run-instances                            | run-scheduled-instances                 
+start-instances                          | stop-instances                          
+terminate-instances                      | unassign-ipv6-addresses                 
+unassign-private-ip-addresses            | unmonitor-instances                     
+update-security-group-rule-descriptions-egress | update-security-group-rule-descriptions-ingress
+wait                                     | help                                    
+
+
+Invalid choice: 'terminate-instance', maybe you meant:
+
+  * terminate-instances
+]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ aws ec2 terminate-instance i-003b028bce5805df6[Cs i-003b028bce5805df6
+usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
+To see help text, you can run:
+
+  aws help
+  aws <command> help
+  aws <command> <subcommand> help
+aws: error: the following arguments are required: --instance-ids
+]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ aws ec2 terminate-instances i-003b028bce5805df6-i-003b028bce5805df6-i-003b028bce5805df6[Ci-003b028bce5805df6ni-003b028bce5805df6 [A]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Csi-003b028bce5805df66[A]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cti-003b028bce5805df6[A]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cai-003b028bce5805df6[A]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cni-003b028bce5805df6[A]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cci-003b028bce5805df6[A]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cei-003b028bce5805df6[A]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C-i-003b028bce5805df6[A]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ci-003b028bce5805df6[A]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdi-003b028bce5805df6[A]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Csi-003b028bce5805df6[A]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C i-003b028bce5805df6[A]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
+
+-------------------------------
+[0m[0m|     TerminateInstances      |[0m[0m
+[0m[0m+-----------------------------+[0m[0m
+[0m[2m[33m|[0m[0m|   TerminatingInstances    |[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[0m+---------------------------+[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[0m|        InstanceId         |[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[0m+---------------------------+[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[0m|  [1m[34mi-003b028bce5805df6[0m      |[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[0m+---------------------------+[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|      CurrentState       |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m+-------+-----------------+[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m| Code  |      Name       |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m+-------+-----------------+[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34m32[0m   |  [1m[34mshutting-down[0m  |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m+-------+-----------------+[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|      PreviousState      |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m+---------+---------------+[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  Code   |     Name      |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m+---------+---------------+[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m|  [1m[34m16[0m     |  [1m[34mrunning[0m      |[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[2m[33m|[0m[2m[33m|[0m[0m+---------+---------------+[0m[2m[33m|[0m[2m[33m|[0m[0m
+[0m[0m]0;mirko@tiger: ~/Documents/MoCC exercise1[01;32mmirko@tiger[00m:[01;34m~/Documents/MoCC exercise1[00m$ exit
+
+Script done on 2018-11-24 16:47:19+0100
