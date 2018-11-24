@@ -1,8 +1,9 @@
-#!/bin/sh
+#!/bin/bash -e
 source ./env
 
 ./start-instance.sh $1
-
-./open-ssh.sh $1 echo hi
+sleep 1
+./open-ssh.sh $1 ./linpack.sh
+./open-ssh.sh $1 ./memsweep.sh
 
 ./stop-instance.sh $1
