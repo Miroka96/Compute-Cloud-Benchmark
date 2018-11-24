@@ -1,0 +1,3 @@
+IMAGEID=ami-0f0debf49705e047c
+SECURITYGROUP=sg-0eba59e29f2a2c2c8
+KEYNAME=devenv-key
