@@ -18,6 +18,4 @@ cut -d " " -f 10-11 | sed s/,/./g | awk '{if($2 ~ /GB/){printf "%d000000\n", $1 
 
 rm seq_write
 
-echo $READ
-echo $WRITE
 echo "$WRITE + $READ" | bc
