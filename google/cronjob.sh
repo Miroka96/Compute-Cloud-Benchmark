@@ -1,5 +1,5 @@
 #!/bin/bash
-# automate with: 0 * * * *	cd /root/Compute-Cloud-Benchmark/amazon/ && ./cronjob.sh i-0eb40592c3e1df399 2>&1 > /root/cronerror.log
+# automate with: 0 * * * *	cd /root/Compute-Cloud-Benchmark/google/ && ./cronjob.sh 2>&1 > /root/cronerror.log
 
 source ./env
 
