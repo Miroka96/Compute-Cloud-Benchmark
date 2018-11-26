@@ -9,5 +9,4 @@ fi
 gcloud compute instances create $NAME \
 --machine-type $MACHINETYPE \
 --image-family $IMAGEFAMILY \
---image-project $IMAGEPROJECT \
---metadata-from-file startup-script=startup.sh
+--image-project $IMAGEPROJECT

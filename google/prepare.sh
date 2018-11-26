@@ -1,4 +1,11 @@
 #!/bin/bash -e
+source ./env
 
-./copy-file.sh $1 ../benchmark/*
-./stop-instance.sh $1
+if [ -z "$1" ]
+then NAME="$INSTANCENAME" 
+else NAME="$1" 
+fi
+
+./open-ssh.sh $NAME 'bash -c "sudo apt update && sudo apt install -y fio gcc"'
+./copy-file.sh $NAME ../benchmark/*
+./stop-instance.sh $NAME
