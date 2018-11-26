@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 # automate with: 0 * * * *	cd /root/Compute-Cloud-Benchmark/amazon/ && ./cronjob.sh i-0eb40592c3e1df399 2>&1 > /root/cronerror.log
 
 source ./env
@@ -8,36 +8,55 @@ then NAME="$INSTANCENAME"
 else NAME="$1" 
 fi
 
-env
-
-echo started
-
 CLOUD=google
 
-./start-instance.sh $NAME
+echo "Trying to start instance $NAME"
+./start-instance.sh
+STARTED=$?
+
+while [ $STARTED -gt 0 ]
+do echo "Start failed, trying $NEXT"
+	rm env && ln -s $NEXT env
+	source ./env
+	echo "Starting new instance $NAME"
+	./run-instance.sh
+	echo "Preparing instance $NAME"
+	./prepare.sh
+	echo "Trying to start instance $NAME"
+	./start-instance.sh
+	STARTED=$?
+done
+
 
 echo instance started
-sleep 20
+
+UP=1
+while [ $UP -gt 0 ]
+do echo "is it up?"
+	time ./open-ssh.sh $NAME echo "instance now up" > /dev/null
+	UP=$?
+	sleep 1
+done
 
 echo instance hopefully up
-CPU=$(./open-ssh.sh $NAME ./linpack.sh)
+CPU=$(time ./open-ssh.sh $NAME ./linpack.sh)
 echo "$(date +%s),$CPU" >> $CLOUD-cpu.csv
 echo "benchmarked CPU"
 
-RAM=$(./open-ssh.sh $NAME ./memsweep.sh)
+RAM=$(time ./open-ssh.sh $NAME ./memsweep.sh)
 echo "$(date +%s),$RAM" >> $CLOUD-mem.csv
 echo "benchmarked RAM"
 
-IOS=$(./open-ssh.sh $NAME ./measure-disk-sequential.sh)
+IOS=$(time ./open-ssh.sh $NAME ./measure-disk-sequential.sh)
 echo "$(date +%s),$IOS" >> $CLOUD-disk-sequential.csv
 echo "benchmarked IO seq"
 
-IOR=$(./open-ssh.sh $NAME ./measure-disk-random.sh)
+IOR=$(time ./open-ssh.sh $NAME ./measure-disk-random.sh)
 echo "$(date +%s),$IOR" >> $CLOUD-disk-random.csv
 echo "benchmarked IO rand"
 
 echo "benchmarking done"
 
-./stop-instance.sh $NAME
+time ./stop-instance.sh $NAME
 
 echo "instance stopped"

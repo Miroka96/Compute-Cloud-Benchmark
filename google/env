@@ -1,4 +1,1 @@
-IMAGEFAMILY=ubuntu-1804-lts
-IMAGEPROJECT=ubuntu-os-cloud
-MACHINETYPE=f1-micro
-INSTANCENAME=mocc-dev
+env-eu-west-c

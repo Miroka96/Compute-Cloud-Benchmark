@@ -6,4 +6,4 @@ then NAME="$INSTANCENAME"
 else NAME="$1" 
 fi
 
-gcloud compute instances delete -q $NAME
+gcloud compute instances delete --zone $ZONE -q $NAME

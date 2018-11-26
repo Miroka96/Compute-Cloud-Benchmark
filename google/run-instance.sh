@@ -9,4 +9,5 @@ fi
 gcloud compute instances create $NAME \
 --machine-type $MACHINETYPE \
 --image-family $IMAGEFAMILY \
---image-project $IMAGEPROJECT
+--image-project $IMAGEPROJECT \
+--zone $ZONE

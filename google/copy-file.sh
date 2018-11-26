@@ -3,5 +3,5 @@
 source ./env
 
 for file in ${@:2}
-do gcloud compute scp $file $1:~/
+do gcloud compute scp $file $1:~/ --zone $ZONE
 done

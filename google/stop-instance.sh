@@ -6,4 +6,4 @@ then NAME="$INSTANCENAME"
 else NAME="$1" 
 fi
 
-gcloud compute instances stop $NAME
+gcloud compute instances stop --zone $ZONE $NAME

@@ -1,0 +1,8 @@
+NEXT=env-eu-west-a
+
+IMAGEFAMILY=ubuntu-1804-lts
+IMAGEPROJECT=ubuntu-os-cloud
+MACHINETYPE=f1-micro
+
+INSTANCENAME=mocc-dev-c
+ZONE=europe-west3-c
