@@ -1,0 +1,11 @@
+$ ./linpack.sh 
+4430672.213362
+
+$ ./memsweep.sh 
+2.644623
+
+$ ./measure-disk-sequential.sh 
+4081000000
+
+$ ./measure-disk-random.sh 
+6235
