@@ -1,0 +1,112 @@
+For further questions, please find all benchmarking and automation scripts in this github repository:
+https://github.com/Miroka96/Compute-Cloud-Benchmark
+
+# Questions
+## CPU Benchmark
+
+### 1 Linpack Description
+
+Linpack.sh optionally compiles and runs the linpack.c program. Linpack.c computes a benchmark based on linear
+algebra computations. Specifically, it consists of DGEFA benchmark, which factors a double precision matrix by 
+gaussian elimination and DGESL benchmark which solves the double precision system a * x = b using the factors 
+computed by dgefa. It does so iteratively, measuring cpu time and assuring that the benchmark runs at least 
+once for more than ten seconds. The performance is measured in number of floating points instructions per 
+second. 
+
+### 2 Linpack Measures and effect of paravirtualization
+
+This version of Linpack is single threaded, contains no significant IO (just output to display) and no 
+privileged instructions during the actual benchmarking part. It is therefore unlikely that paravirtualization 
+will play a large role. The most significant impact would be the scheduling of the VM itself. 
+
+### 3 Are the measurements consistent?
+Yes, they are quite low, about half of our local machine. Additionally, they have a small but noticeable 
+standard deviation (286921 for Google, 61098 for Amazon), due to the virtualization and different 
+utilizations. Both platform's smallest instances also perform similar. 
+
+user@local:/$ ./linpack.sh 
+4430672.213362
+
+remote@amazon average: 2292249
+remote@google average: 1932856
+
+## Memory Benchmark
+
+### 1 Memsweep Description and effect of virtualization
+
+Memsweep creates a large array (roughly 33 Mb). Then it performs roughly 331 milion non-sequential reads and 
+writes to this array. The memory accesses is non sequential with growing jumps, so at least in the later 
+accesses cache misses are likely, also because the locality principle is violated. 
+Virtualization can have a significant effect if memory is overcommitted. Scheduling is also relevant again and 
+can have a negative impact. Thus a performance decrease compared to a non-virtualized program is expected. 
+
+### 2 Are the measurements consistent?
+
+The measurements are partly consistent. Because smaller memsweep results are better, it is right that both 
+cloud values are higher than our local test results. The factor for Amazon is roughly 2 and quite stable, the 
+one for Google is around 14 and very flexible (high std deviation).
+An explanation for the Google results could either be old hardware, some incompatibility or maybe an 
+overprovisioning that causes outswapping.
+
+user@local:/$ ./memsweep.sh 
+2.644623
+
+remote@amazon average: 5.02
+standard deviation: 0.19
+
+remote@google average: 31.76
+standard deviation: 4.76
+
+## Disk Benchmark
+
+### 1 Look at the disk measurements. Are they consistent with your expectations? If
+not, what could be the reason?
+
+The results are neither consistent with our expectectations nor with themselves, except that they behave very 
+random like always when there is caching involved. Looking at the values, Amazon seems to have the better 
+storage backend. Their values are higher in general and are even somehow comparable to the local measurements.
+Still, the values are very wide-spread like always in virtualized environments, because nobody knows what is 
+cached by which OS or what did not even leave the IO pipeline. 
+
+#### sequential disk IO
+user@local:/$ ./measure-disk-sequential.sh 
+4081000000
+
+remote@amazon average: 253520833
+standard deviation: 24482725
+
+remote@google average: 10854167
+standard deviation: 356674
+
+#### random disk IO
+user@local:/$ ./measure-disk-random.sh 
+6235
+
+remote@amazon average: 12359
+standard deviation: 24385
+
+remote@google average: 2313
+standard deviation: 3
+
+
+#### discussion
+
+As expected, the cloud hard drives perform worse than the local storage in our PCs or in PCs in general, 
+because since the introduction of fast SSD storages network is again slower than normal networking with 
+remote RAID systems. Anyway, the latency to local SSDs is much smaller than any network-based connection. 
+Another limiting factor are the low compute resources in the cloud instances, that make the performance even 
+worse.
+
+### 2 Compare the results for the two operations (sequential, random). What are
+reasons for the differences?
+
+First, they are measured in completely different units, at least in our benchmark (using dd for sequential 
+and fio for random disk benchmark). The following comes from our own experience, otherwise the whole 
+evaluations says: the result numbers from the sequential script are much larger than those from the random 
+script.
+
+As expected, random disk accesses are much slower than sequential ones. In former times, when traditional 
+hard drives were used, this resulted from the fact, that one always had to "wait" for the disk to come round 
+again. Using SSDs, random IO still violates the locality principle, which makes it impossible to benefit from 
+large read/write operations and instead many small (inefficient) operations are necessary. This IO effort can 
+even be so hard, that during our tests once the SSH connection timed out and the clock often stood still.

@@ -1,19 +1,29 @@
 Script started on 2018-11-24 15:43:20+0100
+
+# create a new security group to provide some isolation inside the cloud environment
 mirko@tiger:~/Documents/MoCC exercise1$ aws ec2 create-security-group --group-name devenv-sg --description "security group for development environment"
 -------------------------------------
 |        CreateSecurityGroup        |
 +----------+------------------------+
 |  GroupId |  sg-0eba59e29f2a2c2c8  |
 +----------+------------------------+
+
+# created security-group and granted external access on SSH-port for the whole ipv4 space
 mirko@tiger:~/Documents/MoCC exercise1$ aws ec2 authorize-security-group-ingress --group-name devenv-sg --protocol tcp --port 22 --cidr 0.0.0.0/0
-mirko@tiger:~/Documents/MoCC exercise1$ # created security-group and granted external access on SSH-port for the whole ipv4 space
+
+# created a key pair to access the VM later (using passwordless SSH login)
 mirko@tiger:~/Documents/MoCC exercise1$ aws ec2 create-key-pair --key-name devenv-key --query 'KeyMaterial' --output text > devenv-key.pem
-mirko@tiger:~/Documents/MoCC exercise1$ # created SSH key pair
+
+# fix SSH key file permissions
 mirko@tiger:~/Documents/MoCC exercise1$ chmod 400 devenv-key.pem
+
+# run a new instance of an Amazon Linux Machine Image using the smallest available instance type
+# the AMI ID is taken from the AWS Marketplace: Amazon Linux AMI (HVM / 64-bit)
 mirko@tiger:~/Documents/MoCC exercise1$ aws ec2 run-instances --image-id ami-0f0debf49705e047c --security-group-ids sg-0eba59e29f2a2c2c8 --count 1 --instance-type t2.nano --key-name devenv-key --query 'Instances[0].InstanceId'
 --------------
 |RunInstances|
 +------------+
+
 mirko@tiger:~/Documents/MoCC exercise1$ aws ec2 describe-instances
 ---------------------------------------------------------------------------------------
 |                                  DescribeInstances                                  |
@@ -123,9 +133,12 @@ mirko@tiger:~/Documents/MoCC exercise1$ aws ec2 describe-instances
 ||||  Code                          |  16                                          ||||
 ||||  Name                          |  running                                     ||||
 |||+--------------------------------+----------------------------------------------+|||
-mirko@tiger:~/Documents/MoCC exercise1$ # the AMI ID is taken from the AWS Marketplace: Amazon Linux AMI (HVM / 64-bit)
+
+# now really get the public IP address using this command (the IP is hidden when the output format is set to table)
 mirko@tiger:~/Documents/MoCC exercise1$ aws ec2 describe-instances --instance-ids i-003b028bce5805df6 --query 'Reservations[0].Instances[0].PublicIpAddress' --output json
 "18.195.23.196"
+
+# connect to the virtual machine using standard SSH utils from the OS
 mirko@tiger:~/Documents/MoCC exercise1$ ssh -i devenv-key.pem ec2-user@18.195.23.196
 The authenticity of host '18.195.23.196 (18.195.23.196)' can't be established.
 ECDSA key fingerprint is SHA256:8vzynBsHdXtr+gDElLk1zcEko0GmXWLB+XIjHITkWoQ.
@@ -141,6 +154,8 @@ https://aws.amazon.com/amazon-linux-ami/2018.03-release-notes/
 ec2-user wheel
 [ec2-user@ip-172-31-35-170 ~]$ logout
 Connection to 18.195.23.196 closed.
+
+# shut down the test VM
 mirko@tiger:~/Documents/MoCC exercise1$ aws ec2 terminate-instances --instance-ids i-003b028bce5805df6
 -------------------------------
 |     TerminateInstances      |

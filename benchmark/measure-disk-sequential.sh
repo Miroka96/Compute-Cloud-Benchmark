@@ -21,4 +21,4 @@ cut -d " " -f 8-9 | sed s/,/./g | awk '{if($2 ~ /GB/){printf "%d000000\n", $1 * 
 
 rm seq_write
 
-echo "$WRITE + $READ" | bc
+echo "$WRITE $READ" | awk '{printf $1 + $2 "\n"}'

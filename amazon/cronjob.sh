@@ -21,11 +21,11 @@ do echo "is it up?"
 done
 
 echo instance hopefully up
-CPU=$(time ./open-ssh.sh $1 ./linpack.sh)
+CPU=$(time ./open-ssh.sh $1 ./measure-cpu.sh)
 echo "$(date +%s),$CPU" >> $CLOUD-cpu.csv
 echo "benchmarked CPU"
 
-RAM=$(time ./open-ssh.sh $1 ./memsweep.sh)
+RAM=$(time ./open-ssh.sh $1 ./measure-mem.sh)
 echo "$(date +%s),$RAM" >> $CLOUD-mem.csv
 echo "benchmarked RAM"
 

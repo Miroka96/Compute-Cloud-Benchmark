@@ -14,7 +14,7 @@
 #include <time.h>
 #include <float.h>
 
-#define ARR_SIZE (8096 * 4096)
+#define ARR_SIZE (4096 * 4096)
 
 double wrapper(void);
 
