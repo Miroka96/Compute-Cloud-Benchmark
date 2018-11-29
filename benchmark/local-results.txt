@@ -1,11 +1,11 @@
-$ ./linpack.sh 
+user@local:/$ ./linpack.sh 
 4430672.213362
 
-$ ./memsweep.sh 
+user@local:/$ ./memsweep.sh 
 2.644623
 
-$ ./measure-disk-sequential.sh 
+user@local:/$ ./measure-disk-sequential.sh 
 4081000000
 
-$ ./measure-disk-random.sh 
+user@local:/$ ./measure-disk-random.sh 
 6235
